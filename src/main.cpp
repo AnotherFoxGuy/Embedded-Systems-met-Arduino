@@ -1,13 +1,22 @@
 #include "Arduino.h"
 #include <WString.h>
 
-#define OPDRACHT 11
+#define OPDRACHT 15
 #define SEPERATOR Serial.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
 #if OPDRACHT == 8
 int pins[] = {8,9,10,11,12,13};
 #endif
 
+#if OPDRACHT == 15
+int pins[] = {8,9,10,11,12,13};
+#endif
+#if OPDRACHT == 16
+int pins [] = {8,9,10,11,12,13};
+
+int currLED = 0;
+bool sub;
+#endif
 
 void setup()
 {
@@ -56,6 +65,10 @@ void setup()
 #if OPDRACHT == 10
      pinMode(11, OUTPUT);
 #endif
+
+#if OPDRACHT == 16 || OPDRACHT == 15
+DDRB = 0x3f;
+#endif
 }
 
 void loop()
@@ -86,5 +99,31 @@ void loop()
 #if OPDRACHT == 11
     Serial.println(analogRead(A0));          // debug value
     delay(100);
+#endif
+
+
+#if OPDRACHT == 15
+  PORTB = B00000000;
+  for (int i = 0; i < (analogRead(A0) / 113); i++){
+    digitalWrite(pins[i], HIGH);
+  }
+#endif
+
+
+#if OPDRACHT == 16
+  if(sub)
+    currLED--;
+  else
+    currLED++;
+
+  PORTB = B00000000;
+  digitalWrite(pins[currLED] , HIGH);
+  
+  if(currLED >= 5)
+    sub = true;
+  if(currLED <= 0)
+    sub = false;
+  
+  delay(100);
 #endif
 }
